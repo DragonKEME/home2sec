@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui
+package fr.insacvl.home2sec.ui.listScreen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,16 +20,16 @@ enum class VoleyState {
     NOP
 }
 
-class HomeViewModel(
+class ListViewModel(
     private val deviceRepository: DeviceRepository
 ): ViewModel() {
 
-    var uiState: HomeUiState by mutableStateOf (HomeUiState.LoadingState)
+    var uiState: ListUiState by mutableStateOf (ListUiState.LoadingState)
         private set
 
     private var refreshScanJob: Job? = null
 
-    private var previousUiState: HomeUiState? = null
+    private var previousUiState: ListUiState? = null
 
     init {
         load_connected_device()
@@ -37,7 +37,7 @@ class HomeViewModel(
 
     fun update_volet(voleyState: VoleyState){
 
-        if (uiState is HomeUiState.ActionState) {
+        if (uiState is ListUiState.ListState) {
             update_action_ui_state(voleyState, null, null,null,)
         }
     }
@@ -87,7 +87,13 @@ class HomeViewModel(
         viewModelScope.launch {
             previousUiState = uiState
             val deviceInfo = deviceRepository.device_info(device.id)
-            uiState = HomeUiState.DeviceInfo(device = deviceInfo)
+            val currentState = uiState
+            if (currentState is ListUiState.ListState){
+                uiState = ListUiState.DeviceInfo(listState = currentState, device = deviceInfo)
+            }else{
+                uiState = ListUiState.DeviceInfo(device = device)
+            }
+
         }
         kill_update()
     }
@@ -102,7 +108,7 @@ class HomeViewModel(
 
     fun dismiss_device_info(){
         val previousUiState = this.previousUiState
-        if (previousUiState != null && previousUiState is HomeUiState.ActionState){
+        if (previousUiState != null && previousUiState is ListUiState.ListState){
             uiState = previousUiState
         }else{
             load_connected_device()
@@ -135,10 +141,10 @@ class HomeViewModel(
                                        scannedDevices: List<Device>?,
                                        scanStarted: Boolean?
     ){
-        if (uiState is HomeUiState.ActionState) {
+        if (uiState is ListUiState.ListState) {
             // If uistate il already action state
-            val oldUiState = uiState as HomeUiState.ActionState
-            uiState = HomeUiState.ActionState(
+            val oldUiState = uiState as ListUiState.ListState
+            uiState = ListUiState.ListState(
                 voletState ?: oldUiState.voletState,
                 connectedDevices ?: oldUiState.connectedDevices,
                 scannedDevices ?: oldUiState.scannedDevices,
@@ -146,7 +152,7 @@ class HomeViewModel(
             )
         } else {
             // Default action state
-            uiState = HomeUiState.ActionState(
+            uiState = ListUiState.ListState(
                 voletState ?: VoleyState.NOP,
                 connectedDevices ?: listOf(),
                 scannedDevices ?: listOf(),

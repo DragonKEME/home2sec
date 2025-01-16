@@ -5,10 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.insacvl.home2sec.data.APIRepository.ApiRepository
 import fr.insacvl.home2sec.data.sampleRepository.SampleRepository
-import fr.insacvl.home2sec.ui.HomeStateCheck
-import fr.insacvl.home2sec.ui.HomeViewModel
+import fr.insacvl.home2sec.ui.listScreen.HomeStateCheck
+import fr.insacvl.home2sec.ui.listScreen.ListViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import io.ktor.client.HttpClient
 
@@ -29,7 +28,7 @@ fun App(clientHttp: HttpClient) {
                 }
             }
         }*/
-        val homeViewModel: HomeViewModel = viewModel { HomeViewModel(ApiRepository(clientHttp)) }
-        HomeStateCheck(homeViewModel, modifier = Modifier)
+        val listViewModel: ListViewModel = viewModel { ListViewModel(SampleRepository()) }
+        HomeStateCheck(listViewModel, modifier = Modifier)
     }
 }
