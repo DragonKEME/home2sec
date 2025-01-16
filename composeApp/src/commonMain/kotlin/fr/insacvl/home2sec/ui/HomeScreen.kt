@@ -14,13 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Popup
-import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.insacvl.home2sec.data.sampleRepository.SampleRepository
 import fr.insacvl.home2sec.models.Device
 
 @Composable
-fun HomeStateCheck(modifier: Modifier = Modifier){
-    val homeViewModel: HomeViewModel = viewModel {HomeViewModel(SampleRepository())}
+fun HomeStateCheck(homeViewModel: HomeViewModel, modifier: Modifier = Modifier){
     Surface(modifier = modifier.fillMaxSize()) {
         when (val homeUiState = homeViewModel.uiState) {
             is HomeUiState.ActionState -> HomeScreen(homeViewModel, homeUiState, modifier = Modifier)
@@ -106,7 +103,6 @@ fun DeviceList(homeViewModel: HomeViewModel, device: Device, modifier: Modifier 
             Button(onClick = {homeViewModel.get_device_info(device)}) { Text("Info") }
             Button(onClick = {homeViewModel.delete_connected_device(device) }) { Text("Delete") }
         } else {
-            Text(device.discoveredAt ?: "No date")
             Button(onClick = {homeViewModel.register_device(device)}) { Text("Register") }
             Button(onClick = {homeViewModel.delete_detected_device(device) }) { Text("Delete") }
         }
@@ -132,10 +128,6 @@ fun PopupInfo(homeViewModel: HomeViewModel, device: Device){
             Row {
                 Text("Device Name: ", fontWeight = FontWeight.Bold)
                 Text(device.name ?: "No name")
-            }
-            Row {
-                Text("Discovered at: ", fontWeight = FontWeight.Bold)
-                Text(device.discoveredAt ?: "No date")
             }
             Row {
                 Text("Registered at: ", fontWeight = FontWeight.Bold)

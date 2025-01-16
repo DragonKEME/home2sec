@@ -8,10 +8,10 @@ import kotlinx.serialization.json.JsonObject
 data class Device(
     val id: Int,
     var name: String? = null,
+    var ip: String,
     val type : String,
-    val metadata: JsonObject,
-    @SerialName("discovered_at")
-    val discoveredAt: String? = null,
+    @SerialName("device_metadata")
+    val deviceMetadata: JsonObject,
     @SerialName("registered_at")
     var registeredAt: String? = null,
     @SerialName("last_seen")

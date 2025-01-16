@@ -11,26 +11,26 @@ val sample_detected_device : List<Device> = listOf(
     Device(
         id = 1,
         type = "temperature_sensor",
-        metadata = JsonObject(content = mapOf()),
-        discoveredAt = "2025-01-13T12:34:56"
+        deviceMetadata = JsonObject(content = mapOf()),
+        ip = "10.3.141.228"
     ),
     Device(
         id = 6,
         type = "switch",
-        metadata = JsonObject(content = mapOf()),
-        discoveredAt = "2025-01-13T12:34:56"
+        deviceMetadata = JsonObject(content = mapOf()),
+        ip = "10.3.141.229"
     ),
     Device(
         id = 7,
         type = "switch",
-        metadata = JsonObject(content = mapOf()),
-        discoveredAt = "2025-01-13T12:34:56"
+        deviceMetadata = JsonObject(content = mapOf()),
+        ip = "10.3.141.230"
     ),
     Device(
         id = 10,
         type = "temperature_sensor",
-        metadata = JsonObject(content = mapOf()),
-        discoveredAt = "2025-01-13T12:34:56"
+        deviceMetadata = JsonObject(content = mapOf()),
+        ip = "10.3.141.231",
     ),
 )
 
@@ -39,36 +39,40 @@ val sample_connected_device: List<Device> = listOf(
         id = 2,
         name = "Living Room Sensor",
         type = "temperature_sensor",
-        metadata = JsonObject(content = mapOf()),
+        deviceMetadata = JsonObject(content = mapOf()),
         registeredAt = "2025-01-01T10:00:00",
         lastSeen = "2025-01-03T12:00:00",
+        ip = "10.3.141.241",
         registered = true
     ),
     Device(
         id = 3,
         name = "Kitchen Room Sensor",
         type = "temperature_sensor",
-        metadata = JsonObject(content = mapOf()),
+        deviceMetadata = JsonObject(content = mapOf()),
         registeredAt = "2025-01-01T10:00:00",
         lastSeen = "2025-01-03T12:00:00",
+        ip = "10.3.141.221",
         registered = true
     ),
     Device(
         id = 4,
         name = "Living Room switch",
         type = "switch",
-        metadata = JsonObject(content = mapOf()),
+        deviceMetadata = JsonObject(content = mapOf()),
         registeredAt = "2025-01-01T10:00:00",
         lastSeen = "2025-01-03T12:00:00",
+        ip = "10.3.141.222",
         registered = true
     ),
     Device(
         id = 5,
         name = "Kitchen Room Switch",
         type = "switch",
-        metadata = JsonObject(content = mapOf()),
+        deviceMetadata = JsonObject(content = mapOf()),
         registeredAt = "2025-01-01T10:00:00",
         lastSeen = "2025-01-03T12:00:00",
+        ip = "10.3.141.232",
         registered = true
     )
 )
