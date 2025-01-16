@@ -12,24 +12,28 @@ val sample_detected_device : List<Device> = listOf(
         id = 1,
         type = "temperature_sensor",
         deviceMetadata = JsonObject(content = mapOf()),
+        discoveredAt = "2025-01-13T12:34:56",
         ip = "10.3.141.228"
     ),
     Device(
         id = 6,
         type = "switch",
         deviceMetadata = JsonObject(content = mapOf()),
+        discoveredAt = "2025-01-13T12:34:56",
         ip = "10.3.141.229"
     ),
     Device(
         id = 7,
         type = "switch",
         deviceMetadata = JsonObject(content = mapOf()),
+        discoveredAt = "2025-01-13T12:34:56",
         ip = "10.3.141.230"
     ),
     Device(
         id = 10,
         type = "temperature_sensor",
         deviceMetadata = JsonObject(content = mapOf()),
+        discoveredAt = "2025-01-13T12:34:56",
         ip = "10.3.141.231",
     ),
 )

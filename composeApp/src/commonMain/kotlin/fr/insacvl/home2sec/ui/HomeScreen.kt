@@ -137,6 +137,10 @@ fun PopupInfo(homeViewModel: HomeViewModel, device: Device){
                 Text("Last seen: ", fontWeight = FontWeight.Bold)
                 Text(device.lastSeen ?: "Never seen")
             }
+            Row {
+                Text("IP: ", fontWeight = FontWeight.Bold)
+                Text(device.ip)
+            }
             Button(
                 onClick = { homeViewModel.dismiss_device_info() },
                 modifier = Modifier.align(Alignment.End)

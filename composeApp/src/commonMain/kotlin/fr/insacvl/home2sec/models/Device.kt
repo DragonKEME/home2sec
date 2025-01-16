@@ -12,6 +12,8 @@ data class Device(
     val type : String,
     @SerialName("device_metadata")
     val deviceMetadata: JsonObject,
+    @SerialName("discovered_at")
+    val discoveredAt: String? = null,
     @SerialName("registered_at")
     var registeredAt: String? = null,
     @SerialName("last_seen")
