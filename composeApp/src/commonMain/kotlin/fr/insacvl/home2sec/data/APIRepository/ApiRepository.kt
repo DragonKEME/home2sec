@@ -19,6 +19,8 @@ class ApiRepository (
 ): DeviceRepository{
     val BASE_URL = "http://10.3.141.1:8000"
 
+    override var detailledDeviceId: Int? = null
+
     override suspend fun get_detected_device(): List<Device> {
         val devices: List<Device> = httpClient.get("$BASE_URL/api/detected-devices").body()
         return devices
@@ -61,19 +63,27 @@ class ApiRepository (
     }
 
     override suspend fun get_device_sensor_data(device: Device): List<SensorData> {
-        TODO("Not yet implemented")
+        val sensorsDatas: List<SensorData> = httpClient
+            .get("$BASE_URL/api/device/${device.id}/sensor_data/3").body() // TODO: change "3" to a parameter value
+        return sensorsDatas
     }
 
     override suspend fun get_device_action(device: Device): List<DeviceAction> {
-        TODO("Not yet implemented")
+        val actions: List<DeviceAction> = httpClient
+            .get("$BASE_URL/api/device/${device.id}/actions").body()
+        return actions
     }
 
     override suspend fun do_action(device: Device, action: DeviceAction) {
-        TODO("Not yet implemented")
+        if (!httpClient.post("$BASE_URL/api/device/${device.id}/action/${action.id}").status.isSuccess()){
+            throw InternalError(InternalErrorKind.SERVER_ERROR)
+        }
     }
 
     override suspend fun get_device_logs(device: Device): List<DeviceLog> {
-        TODO("Not yet implemented")
+        val logs: List<DeviceLog> = httpClient
+            .get("$BASE_URL/api/device/${device.id}/logs/3").body() // TODO: change "3" to a parameter value
+        return logs
     }
 
 }

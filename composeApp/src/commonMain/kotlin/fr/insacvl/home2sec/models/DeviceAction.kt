@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DeviceAction(
     val id: Int,
-    @SerialName("action_name")
+    @SerialName("command_name")
     val actionName: String,
-    val command: String,
 )

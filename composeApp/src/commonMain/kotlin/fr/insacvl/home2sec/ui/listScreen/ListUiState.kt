@@ -10,10 +10,5 @@ sealed interface ListUiState {
         val scanStarted: Boolean
     ): ListUiState
 
-    data class DeviceInfo(
-        val device: Device,
-        val listState: ListState? = null,
-    ): ListUiState
-
     data object LoadingState: ListUiState
 }

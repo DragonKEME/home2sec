@@ -15,6 +15,7 @@ class SampleRepository: DeviceRepository {
     private var connected: Boolean = false
     private var localConnectedDevice: MutableList<Device> = mutableListOf()
 
+    override var detailledDeviceId: Int? = null
 
     // Detected device management
     override suspend fun get_detected_device(): List<Device> {

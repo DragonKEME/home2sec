@@ -2,33 +2,22 @@ package fr.insacvl.home2sec
 
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.Composable
+import fr.insacvl.home2sec.data.APIRepository.ApiRepository
+import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.data.sampleRepository.SampleRepository
-import fr.insacvl.home2sec.ui.listScreen.HomeStateCheck
-import fr.insacvl.home2sec.ui.listScreen.ListViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import fr.insacvl.home2sec.ui.HomeNavigation
 import io.ktor.client.HttpClient
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App(clientHttp: HttpClient) {
     MaterialTheme {
-        /*var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                //val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: oui")
-                }
-            }
-        }*/
-        val listViewModel: ListViewModel = viewModel { ListViewModel(SampleRepository()) }
-        HomeStateCheck(listViewModel, modifier = Modifier)
+
+        // Change here the data location
+        val deviceRepository: DeviceRepository = ApiRepository(httpClient = clientHttp)
+        //val deviceRepository: DeviceRepository = SampleRepository()
+        HomeNavigation(deviceRepository)
     }
 }

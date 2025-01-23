@@ -23,6 +23,8 @@ ktorSerializationKotlinxJson = "3.0.3"
 lifecycleViewmodelCompose = "2.8.2"
 ktor = "3.0.3"
 foundationLayoutAndroid = "1.7.6"
+navigationCompose = "2.8.0-alpha10"
+foundationAndroid = "1.7.6"
 
 [libraries]
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose" }
@@ -50,6 +52,8 @@ lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifec
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 
 
 [plugins]

@@ -84,26 +84,34 @@ val sample_connected_device: List<Device> = listOf(
 val sample_device_data: Map<Int, List<SensorData>> = mapOf(
     3 to listOf(
         SensorData(
-            dataType = "temperature",
+            id = 1,
+            sensorType = "temperature",
             value = 35.0,
-            timestamp = "2025-01-03T12:00:00"
+            timestamp = "2025-01-03T12:00:00",
+            deviceId = 3
         ),
         SensorData(
-            dataType = "temperature",
+            id = 2,
+            sensorType = "temperature",
             value = 15.0,
-            timestamp = "2025-01-03T12:00:00"
+            timestamp = "2025-01-03T12:00:00",
+            deviceId = 3
         )
     ),
     2 to listOf(
         SensorData(
-            dataType = "temperature",
+            id = 3,
+            sensorType = "temperature",
             value = 50.0,
-            timestamp = "2025-01-03T12:00:00"
+            timestamp = "2025-01-03T12:00:00",
+            deviceId = 2
         ),
         SensorData(
-            dataType = "temperature",
+            id = 4,
+            sensorType = "temperature",
             value = 1.0,
-            timestamp = "2025-01-03T12:00:00"
+            timestamp = "2025-01-03T12:00:00",
+            deviceId = 2
         )
     )
 )
@@ -112,45 +120,37 @@ val sample_device_action: Map<Int,List<DeviceAction>> = mapOf(
     5 to listOf( DeviceAction(
             id = 1,
             actionName = "Turn On",
-            command = "ON"
         ),
         DeviceAction(
             id = 2,
             actionName = "Turn Off",
-            command = "OFF"
         )
     ),
     6 to listOf( DeviceAction(
             id = 1,
             actionName = "Turn On",
-            command = "ON"
         ),
         DeviceAction(
             id = 2,
             actionName = "Turn Off",
-            command = "OFF"
         )
     ),
     7 to listOf( DeviceAction(
             id = 1,
             actionName = "Turn On",
-            command = "ON"
         ),
         DeviceAction(
             id = 2,
             actionName = "Turn Off",
-            command = "OFF"
         )
     ),
     8 to listOf( DeviceAction(
             id = 1,
             actionName = "Turn On",
-            command = "ON"
         ),
         DeviceAction(
             id = 2,
             actionName = "Turn Off",
-            command = "OFF"
         )
     ),
 )

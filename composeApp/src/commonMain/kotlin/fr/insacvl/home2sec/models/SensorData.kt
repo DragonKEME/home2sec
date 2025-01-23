@@ -5,8 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SensorData(
-    @SerialName("data_type")
-    val dataType: String,
+    val id: Int,
+    @SerialName("sensor_type")
+    val sensorType: String,
     val value: Double,
+    @SerialName("device_id")
+    val deviceId: Int,
     val timestamp: String
 )

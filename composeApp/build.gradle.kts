@@ -65,6 +65,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.navigation.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -106,6 +107,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
 }
 

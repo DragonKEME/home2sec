@@ -10,7 +10,6 @@ import fr.insacvl.home2sec.models.Device
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 
@@ -51,27 +50,22 @@ class ListViewModel(
 
     fun start_scan() {
         println("Scan start")
-        viewModelScope.launch {
+        // Launch async job
+        this.refreshScanJob = CoroutineScope(Dispatchers.Main).launch  {
+            // The device repository will lock until the server finish the scan.
             deviceRepository.scan_start()
-            println("Scan started")
+            println("Scan Finished")
+            // Update scanned device.
+            update_scan()
+            update_action_ui_state(null, null, null, false)
         }
+        // Set device loading
         update_action_ui_state(null, null, null, true)
-        // TODO: Better timer function
-        this.refreshScanJob = CoroutineScope(Dispatchers.Main).launch {
-            while (true){
-                delay(1000)
-                update_scan()
-            }
-        }
     }
 
     fun stop_scan() {
-        kill_update()
-        update_action_ui_state(null, null, null, false)
-    }
-
-    private fun kill_update() {
         refreshScanJob?.job?.cancel()
+        update_action_ui_state(null, null, null, false)
     }
 
     private fun update_scan() {
@@ -84,18 +78,7 @@ class ListViewModel(
     }
 
     fun get_device_info(device: Device) {
-        viewModelScope.launch {
-            previousUiState = uiState
-            val deviceInfo = deviceRepository.device_info(device.id)
-            val currentState = uiState
-            if (currentState is ListUiState.ListState){
-                uiState = ListUiState.DeviceInfo(listState = currentState, device = deviceInfo)
-            }else{
-                uiState = ListUiState.DeviceInfo(device = device)
-            }
-
-        }
-        kill_update()
+        deviceRepository.detailledDeviceId = device.id
     }
 
     fun register_device(device: Device){
@@ -104,15 +87,6 @@ class ListViewModel(
             update_connected_device()
         }
 
-    }
-
-    fun dismiss_device_info(){
-        val previousUiState = this.previousUiState
-        if (previousUiState != null && previousUiState is ListUiState.ListState){
-            uiState = previousUiState
-        }else{
-            load_connected_device()
-        }
     }
 
     fun delete_connected_device(device: Device){

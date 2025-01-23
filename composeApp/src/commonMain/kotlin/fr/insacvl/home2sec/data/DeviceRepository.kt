@@ -6,6 +6,8 @@ import fr.insacvl.home2sec.models.DeviceLog
 import fr.insacvl.home2sec.models.SensorData
 
 interface DeviceRepository {
+    var detailledDeviceId: Int?
+
     // Detected device and scan
     suspend fun get_detected_device(): List<Device>
     suspend fun scan_start()
