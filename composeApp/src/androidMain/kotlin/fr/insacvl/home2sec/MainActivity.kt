@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 
@@ -16,6 +17,10 @@ class MainActivity : ComponentActivity() {
         val httpClient = HttpClient(OkHttp) {
             install(ContentNegotiation) {
                 json()
+            }
+            install(HttpTimeout){
+                requestTimeoutMillis = 30000
+                socketTimeoutMillis = 30000
             }
         }
         setContent {
