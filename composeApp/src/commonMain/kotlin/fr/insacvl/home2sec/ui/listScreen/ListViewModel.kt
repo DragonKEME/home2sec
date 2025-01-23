@@ -28,7 +28,8 @@ class ListViewModel(
 
     private var refreshScanJob: Job? = null
 
-    private var previousUiState: ListUiState? = null
+    var registerDeviceName by mutableStateOf("")
+        private set
 
     init {
         load_connected_device()
@@ -81,10 +82,34 @@ class ListViewModel(
         deviceRepository.detailledDeviceId = device.id
     }
 
+    fun register_screen(device: Device){
+        val oldUiState = this.uiState
+        if (oldUiState is ListUiState.ListState){
+            uiState = ListUiState.RegisterDevice(oldUiState, device)
+        }else{
+            uiState = ListUiState.RegisterDevice(null, device)
+        }
+    }
+
+    fun dismiss_register(){
+        val oldUiState = uiState
+        if (oldUiState is ListUiState.RegisterDevice && oldUiState.listState != null){
+            uiState = oldUiState.listState
+        }else{
+            load_connected_device()
+        }
+        registerDeviceName = ""
+    }
+
+    fun update_register_name(name: String){
+        this.registerDeviceName = name
+    }
+
     fun register_device(device: Device){
         viewModelScope.launch {
-            deviceRepository.add_new_device(device, name = "feurfeur") // TODO: Change that
+            deviceRepository.add_new_device(device, name = registerDeviceName)
             update_connected_device()
+            registerDeviceName = ""
         }
 
     }

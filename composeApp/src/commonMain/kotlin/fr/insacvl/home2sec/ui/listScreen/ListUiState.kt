@@ -10,5 +10,10 @@ sealed interface ListUiState {
         val scanStarted: Boolean
     ): ListUiState
 
+    data class RegisterDevice(
+        val listState: ListState?,
+        val device: Device
+    ): ListUiState
+
     data object LoadingState: ListUiState
 }

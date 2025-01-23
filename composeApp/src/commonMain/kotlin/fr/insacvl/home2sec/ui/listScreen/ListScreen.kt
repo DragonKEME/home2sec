@@ -5,8 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,10 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.models.Device
+import fr.insacvl.home2sec.ui.Component.Popup
 import fr.insacvl.home2sec.ui.Page
 
 @Composable
@@ -26,6 +35,7 @@ fun HomeStateCheck(navHostController: NavHostController, deviceRepository: Devic
     Surface(modifier = modifier.fillMaxSize()) {
         when (val listUiState = listViewModel.uiState) {
             is ListUiState.ListState -> HomeScreen(navHostController, listViewModel, listUiState, modifier = Modifier)
+            is ListUiState.RegisterDevice -> PopupRegister(navHostController, listViewModel, listUiState, modifier= Modifier)
             is ListUiState.LoadingState -> { }
         }
 
@@ -136,8 +146,53 @@ fun DeviceList(
                 Text("Delete")
             }
         } else {
-            Button(onClick = {listViewModel.register_device(device)}) { Text("Register") }
+            Button(onClick = {listViewModel.register_screen(device)}) { Text("Register") }
             Button(onClick = {listViewModel.delete_detected_device(device) }) { Text("Delete") }
+        }
+    }
+}
+
+@Composable
+fun PopupRegister(
+    navHostController: NavHostController,
+    listViewModel: ListViewModel,
+    listUiState: ListUiState.RegisterDevice,
+    modifier: Modifier = Modifier
+){
+    val device = listUiState.device
+    Popup(
+        modifier = modifier,
+        onDismiss = { listViewModel.dismiss_register() },
+        background = if (listUiState.listState != null){
+            { HomeScreen(navHostController, listViewModel, listUiState.listState, modifier = modifier) }
+        }else{
+            null
+        }
+    ){
+        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.width(200.dp)) {
+            Row {
+                OutlinedTextField(
+                    value = listViewModel.registerDeviceName,
+                    singleLine = true,
+                    onValueChange = { listViewModel.update_register_name(it) },
+                    label = { Text("Device Name") },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { listViewModel.register_device(device) }
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+                )
+            }
+            Button(
+                onClick = { listViewModel.register_device(device) },
+                modifier = Modifier.align(Alignment.End).fillMaxWidth()
+            ) {
+                Text("Register")
+            }
+
         }
     }
 }
