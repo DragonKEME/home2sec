@@ -16,8 +16,12 @@ class DeviceDetailViewModel(
     private val deviceRepository: DeviceRepository,
 
 ): ViewModel() {
-    var uiState: DeviceDetailUiState by mutableStateOf(DeviceDetailUiState())
+    var uiState: DeviceDetailUiState by mutableStateOf(DeviceDetailUiState.DeviceInfo())
         private set
+
+    var editDeviceName by mutableStateOf("")
+        private set
+
 
     init {
         load_device_detail()
@@ -37,7 +41,7 @@ class DeviceDetailViewModel(
                 val deviceLogs = async {
                     deviceRepository.get_device_logs(device)
                 }
-                uiState = DeviceDetailUiState(
+                uiState = DeviceDetailUiState.DeviceInfo(
                     device = device,
                     action = deviceActions.await(),
                     sensor = deviceSensors.await(),
@@ -50,6 +54,38 @@ class DeviceDetailViewModel(
     fun do_action(device: Device, action: DeviceAction){
         viewModelScope.launch {
             deviceRepository.do_action(device, action)
+        }
+    }
+
+    fun change_name_screen(){
+        val oldUiState = this.uiState
+        if (oldUiState is DeviceDetailUiState.DeviceInfo && oldUiState.device != null){
+            uiState = DeviceDetailUiState.EditDeviceName(oldUiState)
+            editDeviceName = oldUiState.device.name ?: ""
+        }
+    }
+
+    fun update_name_string(name: String){
+        editDeviceName = name
+    }
+
+    fun dismiss_update(){
+        val currentUiState = uiState
+        if (currentUiState is DeviceDetailUiState.EditDeviceName){
+            uiState = currentUiState.deviceInfo
+        }
+        editDeviceName = ""
+    }
+
+    fun update_device(){
+        val currentUiState = uiState
+        if (currentUiState !is DeviceDetailUiState.EditDeviceName){
+            return
+        }
+        val device = currentUiState.deviceInfo.device!! // Must exist
+        device.name = editDeviceName
+        viewModelScope.launch {
+            deviceRepository.update_registered_device(device.id, device)
         }
     }
 }

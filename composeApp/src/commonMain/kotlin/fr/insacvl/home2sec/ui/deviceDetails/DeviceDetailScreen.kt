@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -28,11 +34,24 @@ import fr.insacvl.home2sec.models.Device
 import fr.insacvl.home2sec.models.DeviceAction
 import fr.insacvl.home2sec.models.DeviceLog
 import fr.insacvl.home2sec.models.SensorData
+import fr.insacvl.home2sec.ui.Component.Popup
 
 @Composable
-fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, modifier: Modifier = Modifier) {
+fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, modifier: Modifier = Modifier){
     val deviceDetailViewModel: DeviceDetailViewModel = viewModel {DeviceDetailViewModel(deviceRepository)}
+    when (val uiState = deviceDetailViewModel.uiState){
+        is DeviceDetailUiState.DeviceInfo -> DeviceDetails(navHostController, deviceDetailViewModel, uiState, modifier)
+        is DeviceDetailUiState.EditDeviceName -> PopupDeviceEdit(navHostController, deviceDetailViewModel, uiState, modifier)
+    }
+}
 
+@Composable
+fun DeviceDetails(
+    navHostController: NavHostController,
+    deviceDetailViewModel: DeviceDetailViewModel,
+    deviceDetailUiState: DeviceDetailUiState.DeviceInfo,
+    modifier: Modifier = Modifier
+) {
     Surface (
         color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
         modifier = modifier.fillMaxSize()
@@ -46,11 +65,12 @@ fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: De
                     Text("Back")
                 }
             }
-            val deviceDetailUiState = deviceDetailViewModel.uiState
             if (deviceDetailUiState.device == null) {
                 Text("no device")
             } else {
-                DeviceDetail(deviceDetailUiState.device)
+                DeviceDetail(deviceDetailUiState.device, editButton = {
+                    deviceDetailViewModel.change_name_screen()
+                })
                 for (action in deviceDetailUiState.action) {
                     ActionElement(deviceDetailViewModel, action, deviceDetailUiState.device)
                 }
@@ -79,7 +99,7 @@ fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: De
 }
 
 @Composable
-fun DeviceDetail(device: Device, modifier: Modifier = Modifier){
+fun DeviceDetail(device: Device, editButton: () -> Unit, modifier: Modifier = Modifier){
     Box(modifier = modifier.clip(RoundedCornerShape(10.dp))) {
         Box(
             Modifier
@@ -111,6 +131,13 @@ fun DeviceDetail(device: Device, modifier: Modifier = Modifier){
                 Row {
                     Text("IP: ", fontWeight = FontWeight.Bold)
                     Text(device.ip)
+                }
+                Row {
+                    Button(
+                        onClick = editButton
+                    ){
+                        Text("Change Name")
+                    }
                 }
             }
         }
@@ -172,5 +199,52 @@ fun LogElement(log: DeviceLog){
         Text(log.logType)
         Text(log.message)
         Text(log.timestamp)
+    }
+}
+
+@Composable
+fun PopupDeviceEdit(
+    navHostController: NavHostController,
+    detailViewModel: DeviceDetailViewModel,
+    editUiState: DeviceDetailUiState.EditDeviceName,
+    modifier: Modifier
+){
+    Popup(
+        modifier = modifier,
+        onDismiss = { detailViewModel.dismiss_update() },
+        background = {
+            DeviceDetails(
+                navHostController,
+                detailViewModel,
+                editUiState.deviceInfo,
+                modifier = modifier
+            )
+        }
+    ){
+        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.width(200.dp)) {
+            Row {
+                OutlinedTextField(
+                    value = detailViewModel.editDeviceName,
+                    singleLine = true,
+                    onValueChange = { detailViewModel.update_name_string(it) },
+                    label = { Text("Device Name") },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { detailViewModel.update_device() }
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+                )
+            }
+            Button(
+                onClick = { detailViewModel.update_device() },
+                modifier = Modifier.align(Alignment.End).fillMaxWidth()
+            ) {
+                Text("Update Device")
+            }
+
+        }
     }
 }
