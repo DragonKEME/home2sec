@@ -28,10 +28,11 @@ import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.models.Device
 import fr.insacvl.home2sec.ui.Component.Popup
 import fr.insacvl.home2sec.ui.Page
+import fr.insacvl.home2sec.utils.DateUtils
 
 @Composable
-fun HomeStateCheck(navHostController: NavHostController, deviceRepository: DeviceRepository, modifier: Modifier = Modifier){
-    val listViewModel: ListViewModel = viewModel { ListViewModel(deviceRepository) }
+fun HomeStateCheck(navHostController: NavHostController, deviceRepository: DeviceRepository, dateUtils: DateUtils, modifier: Modifier = Modifier){
+    val listViewModel: ListViewModel = viewModel { ListViewModel(deviceRepository, dateUtils) }
     Surface(modifier = modifier.fillMaxSize()) {
         when (val listUiState = listViewModel.uiState) {
             is ListUiState.ListState -> HomeScreen(navHostController, listViewModel, listUiState, modifier = Modifier)

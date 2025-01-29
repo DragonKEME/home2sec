@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.models.Device
+import fr.insacvl.home2sec.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +21,8 @@ enum class VoleyState {
 }
 
 class ListViewModel(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    private val dateUtils: DateUtils
 ): ViewModel() {
 
     var uiState: ListUiState by mutableStateOf (ListUiState.LoadingState)
@@ -73,6 +75,7 @@ class ListViewModel(
         viewModelScope.launch {
             println("Scan device")
             val scannedDevices = deviceRepository.get_detected_device()
+            format_devices_date(scannedDevices)
             update_action_ui_state(null, null, scannedDevices, null)
             println("Scanned device: " + scannedDevices.size)
         }
@@ -131,10 +134,23 @@ class ListViewModel(
 
     private suspend fun update_connected_device() {
         val connectedDevices = deviceRepository.get_connected_device()
+        format_devices_date(connectedDevices)
         println("Device connected: " + connectedDevices.size)
         update_action_ui_state(null, connectedDevices, null, null)
     }
 
+    private fun format_devices_date(devices: List<Device>) {
+        for (device in devices){
+            val ra = device.registeredAt
+            if (ra != null) {
+                device.registeredAt = dateUtils.FormatDate(ra)
+            }
+            val da = device.discoveredAt
+            if (da != null) {
+                device.registeredAt = dateUtils.FormatDate(da)
+            }
+        }
+    }
     private fun update_action_ui_state(voletState: VoleyState?,
                                        connectedDevices: List<Device>?,
                                        scannedDevices: List<Device>?,

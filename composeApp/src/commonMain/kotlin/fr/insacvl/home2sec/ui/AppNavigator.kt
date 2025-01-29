@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.ui.deviceDetails.DeviceDetailScreen
 import fr.insacvl.home2sec.ui.listScreen.HomeStateCheck
+import fr.insacvl.home2sec.utils.DateUtils
 
 sealed class Page(val route: String){
     data object List: Page("list")
@@ -17,17 +18,17 @@ sealed class Page(val route: String){
 
 
 @Composable
-fun HomeNavigation(deviceRepository: DeviceRepository){
+fun HomeNavigation(deviceRepository: DeviceRepository, dateUtils: DateUtils){
     val navController: NavHostController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Page.List.route
     ) {
         composable(route = Page.List.route) {
-            HomeStateCheck(navController, deviceRepository, modifier = Modifier)
+            HomeStateCheck(navController, deviceRepository, dateUtils, modifier = Modifier)
         }
         composable(route = Page.DeviceDetail.route) {
-            DeviceDetailScreen(navController, deviceRepository)
+            DeviceDetailScreen(navController, deviceRepository, dateUtils)
         }
     }
 

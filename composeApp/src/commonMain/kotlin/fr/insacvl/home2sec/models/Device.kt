@@ -17,7 +17,7 @@ data class Device(
     @SerialName("registered_at")
     var registeredAt: String? = null,
     @SerialName("last_seen")
-    val lastSeen: String? = null,
+    var lastSeen: String? = null,
 
     var registered: Boolean = false
 )

@@ -35,10 +35,11 @@ import fr.insacvl.home2sec.models.DeviceAction
 import fr.insacvl.home2sec.models.DeviceLog
 import fr.insacvl.home2sec.models.SensorData
 import fr.insacvl.home2sec.ui.Component.Popup
+import fr.insacvl.home2sec.utils.DateUtils
 
 @Composable
-fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, modifier: Modifier = Modifier){
-    val deviceDetailViewModel: DeviceDetailViewModel = viewModel {DeviceDetailViewModel(deviceRepository)}
+fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, dateUtils: DateUtils, modifier: Modifier = Modifier){
+    val deviceDetailViewModel: DeviceDetailViewModel = viewModel {DeviceDetailViewModel(deviceRepository, dateUtils)}
     when (val uiState = deviceDetailViewModel.uiState){
         is DeviceDetailUiState.DeviceInfo -> DeviceDetails(navHostController, deviceDetailViewModel, uiState, modifier)
         is DeviceDetailUiState.EditDeviceName -> PopupDeviceEdit(navHostController, deviceDetailViewModel, uiState, modifier)

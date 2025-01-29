@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import fr.insacvl.home2sec.implementation.DateUtilsAndroid
+import fr.insacvl.home2sec.utils.DateUtils
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
@@ -23,8 +25,10 @@ class MainActivity : ComponentActivity() {
                 socketTimeoutMillis = 30000
             }
         }
+        val dateUtils: DateUtils = DateUtilsAndroid()
+        val configuration = Configuration(httpClient, dateUtils)
         setContent {
-            App(httpClient)
+            App(configuration)
         }
     }
 }
@@ -33,5 +37,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppAndroidPreview() {
     val httpClient = HttpClient(OkHttp)
-    App(httpClient)
+    val dateUtils: DateUtils = DateUtilsAndroid()
+    val configuration = Configuration(httpClient, dateUtils)
+    App(configuration)
 }

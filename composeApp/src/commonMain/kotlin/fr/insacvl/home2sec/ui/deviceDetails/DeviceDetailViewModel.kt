@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.models.Device
 import fr.insacvl.home2sec.models.DeviceAction
+import fr.insacvl.home2sec.utils.DateUtils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class DeviceDetailViewModel(
     private val deviceRepository: DeviceRepository,
-
+    private val dateUtils: DateUtils
 ): ViewModel() {
     var uiState: DeviceDetailUiState by mutableStateOf(DeviceDetailUiState.DeviceInfo())
         private set
@@ -40,6 +41,14 @@ class DeviceDetailViewModel(
                 }
                 val deviceLogs = async {
                     deviceRepository.get_device_logs(device)
+                }
+                val ra = device.registeredAt
+                if (ra != null) {
+                    device.registeredAt = dateUtils.FormatDate(ra)
+                }
+                val ls = device.lastSeen
+                if (ls != null) {
+                    device.lastSeen = dateUtils.FormatDate(ls)
                 }
                 uiState = DeviceDetailUiState.DeviceInfo(
                     device = device,

@@ -2,6 +2,8 @@ package fr.insacvl.home2sec
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import fr.insacvl.home2sec.implementation.DateUtilsJs
+import fr.insacvl.home2sec.utils.DateUtils
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.js.Js
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -16,6 +18,8 @@ fun main() {
                 json()
             }
         }
-        App(httpClient)
+        val dateUtils: DateUtils = DateUtilsJs()
+        val configuration = Configuration(httpClient, dateUtils)
+        App(configuration)
     }
 }
