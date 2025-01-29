@@ -8,4 +8,6 @@ data class DeviceAction(
     val id: Int,
     @SerialName("command_name")
     val actionName: String,
+
+    var actionRunning: Boolean = false
 )

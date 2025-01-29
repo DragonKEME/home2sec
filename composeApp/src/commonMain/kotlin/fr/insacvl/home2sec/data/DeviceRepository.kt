@@ -22,7 +22,7 @@ interface DeviceRepository {
     suspend fun remove_registered_device(device: Device)
 
     // Sensor data
-    suspend fun get_device_sensor_data(device: Device): List<SensorData>
+    suspend fun get_device_sensor_data(device: Device, historySize: Int = 1): List<SensorData>
 
     // Device Action
     suspend fun get_device_action(device: Device): List<DeviceAction>

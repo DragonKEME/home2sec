@@ -14,11 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 
-enum class VoleyState {
-    UP,
-    DOWN,
-    NOP
-}
 
 class ListViewModel(
     private val deviceRepository: DeviceRepository,
@@ -37,15 +32,7 @@ class ListViewModel(
         load_connected_device()
     }
 
-    fun update_volet(voleyState: VoleyState){
-
-        if (uiState is ListUiState.ListState) {
-            update_action_ui_state(voleyState, null, null,null,)
-        }
-    }
-
     fun load_connected_device() {
-        println("test")
         viewModelScope.launch {
             update_connected_device()
         }
@@ -60,15 +47,15 @@ class ListViewModel(
             println("Scan Finished")
             // Update scanned device.
             update_scan()
-            update_action_ui_state(null, null, null, false)
+            update_action_ui_state(scanStarted = false)
         }
         // Set device loading
-        update_action_ui_state(null, null, null, true)
+        update_action_ui_state(scanStarted = true)
     }
 
     fun stop_scan() {
         refreshScanJob?.job?.cancel()
-        update_action_ui_state(null, null, null, false)
+        update_action_ui_state(scanStarted = false)
     }
 
     private fun update_scan() {
@@ -76,7 +63,7 @@ class ListViewModel(
             println("Scan device")
             val scannedDevices = deviceRepository.get_detected_device()
             format_devices_date(scannedDevices)
-            update_action_ui_state(null, null, scannedDevices, null)
+            update_action_ui_state( null, scannedDevices, null)
             println("Scanned device: " + scannedDevices.size)
         }
     }
@@ -136,7 +123,7 @@ class ListViewModel(
         val connectedDevices = deviceRepository.get_connected_device()
         format_devices_date(connectedDevices)
         println("Device connected: " + connectedDevices.size)
-        update_action_ui_state(null, connectedDevices, null, null)
+        update_action_ui_state(connectedDevices = connectedDevices)
     }
 
     private fun format_devices_date(devices: List<Device>) {
@@ -151,16 +138,14 @@ class ListViewModel(
             }
         }
     }
-    private fun update_action_ui_state(voletState: VoleyState?,
-                                       connectedDevices: List<Device>?,
-                                       scannedDevices: List<Device>?,
-                                       scanStarted: Boolean?
+    private fun update_action_ui_state(connectedDevices: List<Device>? = null,
+                                       scannedDevices: List<Device>? = null,
+                                       scanStarted: Boolean? = null
     ){
         if (uiState is ListUiState.ListState) {
             // If uistate il already action state
             val oldUiState = uiState as ListUiState.ListState
             uiState = ListUiState.ListState(
-                voletState ?: oldUiState.voletState,
                 connectedDevices ?: oldUiState.connectedDevices,
                 scannedDevices ?: oldUiState.scannedDevices,
                 scanStarted ?: oldUiState.scanStarted
@@ -168,7 +153,6 @@ class ListViewModel(
         } else {
             // Default action state
             uiState = ListUiState.ListState(
-                voletState ?: VoleyState.NOP,
                 connectedDevices ?: listOf(),
                 scannedDevices ?: listOf(),
                 scanStarted ?: false

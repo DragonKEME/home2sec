@@ -65,7 +65,7 @@ class SampleRepository: DeviceRepository {
         localConnectedDevice.remove(deletedDevice)
     }
 
-    override suspend fun get_device_sensor_data(device: Device): List<SensorData> {
+    override suspend fun get_device_sensor_data(device: Device, historySize: Int): List<SensorData> {
         return sample_device_data[device.id] ?: listOf()
     }
 

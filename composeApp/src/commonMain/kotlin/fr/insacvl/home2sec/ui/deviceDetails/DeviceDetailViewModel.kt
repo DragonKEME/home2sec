@@ -8,9 +8,15 @@ import androidx.lifecycle.viewModelScope
 import fr.insacvl.home2sec.data.DeviceRepository
 import fr.insacvl.home2sec.models.Device
 import fr.insacvl.home2sec.models.DeviceAction
+import fr.insacvl.home2sec.models.DeviceLog
+import fr.insacvl.home2sec.models.SensorData
 import fr.insacvl.home2sec.utils.DateUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DeviceDetailViewModel(
@@ -20,12 +26,20 @@ class DeviceDetailViewModel(
     var uiState: DeviceDetailUiState by mutableStateOf(DeviceDetailUiState.DeviceInfo())
         private set
 
+    private var refreshSensorJob: Job? = null
+
     var editDeviceName by mutableStateOf("")
         private set
 
 
     init {
         load_device_detail()
+        lauch_sensor_refresh_job()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        kill_sensor_refresh_job()
     }
 
     fun load_device_detail(){
@@ -58,6 +72,25 @@ class DeviceDetailViewModel(
                 )
             }
         }
+    }
+
+    fun lauch_sensor_refresh_job() {
+        refreshSensorJob = CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                val currentUiState = uiState
+                if (currentUiState is DeviceDetailUiState.DeviceInfo && currentUiState.device != null) {
+                    val sensorDatas =
+                        deviceRepository.get_device_sensor_data(device = currentUiState.device)
+                    update_device_info_ui_state(sensor = sensorDatas)
+                }
+                delay(1000)
+            }
+        }
+    }
+
+    fun kill_sensor_refresh_job() {
+        this.refreshSensorJob?.cancel()
+        this.refreshSensorJob = null
     }
 
     fun do_action(device: Device, action: DeviceAction){
@@ -95,6 +128,30 @@ class DeviceDetailViewModel(
         device.name = editDeviceName
         viewModelScope.launch {
             deviceRepository.update_registered_device(device.id, device)
+        }
+    }
+
+    private fun update_device_info_ui_state(
+        device: Device? = null,
+        action: List<DeviceAction>? = null,
+        sensor: List<SensorData>? = null,
+        logs: List<DeviceLog>? = null
+    ){
+        val currentUiState = uiState
+        uiState = if (currentUiState is DeviceDetailUiState.DeviceInfo){
+            DeviceDetailUiState.DeviceInfo(
+                device ?: currentUiState.device,
+                action ?: currentUiState.action,
+                sensor ?: currentUiState.sensor,
+                logs ?: currentUiState.logs
+            )
+        } else {
+            DeviceDetailUiState.DeviceInfo(
+                device,
+                action ?: listOf(),
+                sensor ?: listOf(),
+                logs ?: listOf()
+            )
         }
     }
 }

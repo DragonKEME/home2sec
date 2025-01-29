@@ -65,9 +65,9 @@ class ApiRepository (
         }
     }
 
-    override suspend fun get_device_sensor_data(device: Device): List<SensorData> {
+    override suspend fun get_device_sensor_data(device: Device, historySize: Int): List<SensorData> {
         val sensorsDatas: List<SensorData> = httpClient
-            .get("$BASE_URL/api/device/${device.id}/sensor_data/3").body() // TODO: change "3" to a parameter value
+            .get("$BASE_URL/api/device/${device.id}/sensor_data/1").body() // Fix to 1 cause sensor history
         return sensorsDatas
     }
 

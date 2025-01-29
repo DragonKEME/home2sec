@@ -53,37 +53,6 @@ fun HomeScreen(
 ) {
     println("redraw home screen")
     Column (modifier = modifier.fillMaxWidth()){
-        if (listUiState.voletState == VoleyState.UP){
-            Text("Volet Montant")
-        }else if (listUiState.voletState == VoleyState.DOWN){
-            Text("Volet Descendant")
-        }else {
-            Text("Volet pas bougé")
-        }
-
-        Row (horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()){
-            Button(
-                onClick = {
-                    listViewModel.update_volet(VoleyState.UP)
-                }
-            ) {
-                Text("Monter Volet")
-            }
-            Button(
-                onClick = {
-                    listViewModel.update_volet(VoleyState.NOP)
-                }
-            ) {
-                Text("Stop")
-            }
-            Button(
-                onClick = {
-                    listViewModel.update_volet(VoleyState.DOWN)
-                }
-            ) {
-                Text("Baisser Volet")
-            }
-        }
         for (device in listUiState.connectedDevices) {
             println("draw device: " + device.id)
             DeviceList(navHostController, listViewModel, device, modifier = Modifier.fillMaxWidth())
