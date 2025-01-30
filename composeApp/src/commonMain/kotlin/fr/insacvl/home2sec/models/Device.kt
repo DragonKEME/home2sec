@@ -18,6 +18,8 @@ data class Device(
     var registeredAt: String? = null,
     @SerialName("last_seen")
     var lastSeen: String? = null,
+    @SerialName("is_alive")
+    val isAlive: Boolean = true,
 
     var registered: Boolean = false
 )

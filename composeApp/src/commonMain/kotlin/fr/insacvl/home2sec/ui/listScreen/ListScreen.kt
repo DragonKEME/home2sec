@@ -98,9 +98,14 @@ fun DeviceList(
     Modifier = Modifier
 ){
     Box (modifier = modifier.padding(10.dp)) {
+        val borderColor = if (device.isAlive) {
+            MaterialTheme.colorScheme.tertiary
+        } else {
+            MaterialTheme.colorScheme.error
+        }
         Card(
             modifier = Modifier
-                .border(2.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(3.dp)),
+                .border(2.dp, borderColor, RoundedCornerShape(3.dp)),
             colors = CardDefaults.cardColors()
                 .copy(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         ) {
