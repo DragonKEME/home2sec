@@ -11,5 +11,8 @@ enum class InternalErrorKind {
     ADD_FAIL,
 
     // server fail
-    SERVER_ERROR
+    SERVER_ERROR,
+
+    // Login error
+    LOGIN_FAIL
 }

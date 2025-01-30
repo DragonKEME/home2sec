@@ -17,9 +17,17 @@ class SampleRepository: DeviceRepository {
 
     override var detailledDeviceId: Int? = null
 
+    // login
+    override suspend fun login(username: String, password: String) {
+        if (username == "test" && password == "feur"){
+            return
+        }
+        throw InternalError(InternalErrorKind.LOGIN_FAIL)
+    }
+
     // Detected device management
     override suspend fun get_detected_device(): List<Device> {
-        return localDetectedDevice
+        return ArrayList(localDetectedDevice.map { it.copy() })
     }
 
     override suspend fun scan_start() {
@@ -38,12 +46,12 @@ class SampleRepository: DeviceRepository {
             connected = true
             localConnectedDevice = sample_connected_device.toMutableList()
         }
-        return localConnectedDevice
+        return ArrayList(localConnectedDevice.map { it.copy() })
     }
 
     override suspend fun add_new_device(device: Device, name: String) {
         device.name = name
-        device.registeredAt = "2025-01-13T11:32:00"
+        device.registeredAt = "2025-01-13T11:32:00+01:00"
         device.registered = true
         localConnectedDevice.add(device)
         val deviceRemoved = localDetectedDevice.find { it.id == device.id }
@@ -51,13 +59,14 @@ class SampleRepository: DeviceRepository {
     }
 
     override suspend fun device_info(id: Int): Device {
-        return localConnectedDevice.find { it.id == id} ?: throw InternalError(InternalErrorKind.UNKNOWN_DEVICE)
+        return localConnectedDevice.find { it.id == id}?.copy() ?: throw InternalError(InternalErrorKind.UNKNOWN_DEVICE)
     }
 
     override suspend fun update_registered_device(id: Int, device: Device) {
         val deletedDevice = localConnectedDevice.find { it.id == id} ?: throw InternalError(InternalErrorKind.UNKNOWN_DEVICE)
+        val newDevice = deletedDevice.copy(name = device.name)
         localConnectedDevice.remove(deletedDevice)
-        localConnectedDevice.add(device)
+        localConnectedDevice.add(newDevice)
     }
 
     override suspend fun remove_registered_device(device: Device) {
@@ -66,11 +75,11 @@ class SampleRepository: DeviceRepository {
     }
 
     override suspend fun get_device_sensor_data(device: Device, historySize: Int): List<SensorData> {
-        return sample_device_data[device.id] ?: listOf()
+        return sample_device_data[device.id]?.toList() ?: listOf()
     }
 
     override suspend fun get_device_action(device: Device): List<DeviceAction> {
-        return sample_device_action[device.id] ?: listOf()
+        return sample_device_action[device.id]?.toList() ?: listOf()
     }
 
     override suspend fun do_action(device: Device, action: DeviceAction) {
@@ -78,6 +87,6 @@ class SampleRepository: DeviceRepository {
     }
 
     override suspend fun get_device_logs(device: Device): List<DeviceLog> {
-        return sample_device_log[device.id] ?: listOf()
+        return sample_device_log[device.id]?.toList() ?: listOf()
     }
 }

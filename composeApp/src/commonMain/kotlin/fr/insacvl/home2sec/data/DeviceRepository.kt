@@ -8,6 +8,9 @@ import fr.insacvl.home2sec.models.SensorData
 interface DeviceRepository {
     var detailledDeviceId: Int?
 
+    // Login
+    suspend fun login(username: String, password: String)
+
     // Detected device and scan
     suspend fun get_detected_device(): List<Device>
     suspend fun scan_start()
