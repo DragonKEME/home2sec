@@ -1,6 +1,7 @@
 package fr.insacvl.home2sec.ui.deviceDetails
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,9 +42,22 @@ import fr.insacvl.home2sec.utils.DateUtils
 @Composable
 fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, dateUtils: DateUtils, modifier: Modifier = Modifier){
     val deviceDetailViewModel: DeviceDetailViewModel = viewModel {DeviceDetailViewModel(deviceRepository, dateUtils)}
-    when (val uiState = deviceDetailViewModel.uiState){
-        is DeviceDetailUiState.DeviceInfo -> DeviceDetails(navHostController, deviceDetailViewModel, uiState, modifier)
-        is DeviceDetailUiState.EditDeviceName -> PopupDeviceEdit(navHostController, deviceDetailViewModel, uiState, modifier)
+    Surface (modifier = modifier.fillMaxSize()) {
+        when (val uiState = deviceDetailViewModel.uiState) {
+            is DeviceDetailUiState.DeviceInfo -> DeviceDetails(
+                navHostController,
+                deviceDetailViewModel,
+                uiState,
+                modifier
+            )
+
+            is DeviceDetailUiState.EditDeviceName -> PopupDeviceEdit(
+                navHostController,
+                deviceDetailViewModel,
+                uiState,
+                modifier
+            )
+        }
     }
 }
 
@@ -55,7 +69,6 @@ fun DeviceDetails(
     modifier: Modifier = Modifier
 ) {
     Surface (
-        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
         modifier = modifier.fillMaxSize()
     ) {
         Column(
@@ -102,10 +115,14 @@ fun DeviceDetails(
 
 @Composable
 fun DeviceDetail(device: Device, editButton: () -> Unit, modifier: Modifier = Modifier){
-    Box(modifier = modifier.clip(RoundedCornerShape(10.dp))) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .border(2.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(11.dp)),
+    ) {
         Box(
             Modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(30.dp),
             contentAlignment = Alignment.Center
         ) {

@@ -1,16 +1,25 @@
 package fr.insacvl.home2sec.ui.listScreen
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,7 +61,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     println("redraw home screen")
-    Column (modifier = modifier.fillMaxWidth()){
+    Column (modifier = modifier.fillMaxWidth().verticalScroll(rememberScrollState())){
         for (device in listUiState.connectedDevices) {
             println("draw device: " + device.id)
             DeviceList(navHostController, listViewModel, device, modifier = Modifier.fillMaxWidth())
@@ -88,36 +97,85 @@ fun DeviceList(
     device: Device, modifier:
     Modifier = Modifier
 ){
-    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = modifier) {
-        // Fix mutable variable
-        val deviceName = device.name
-        if (deviceName != null) {
-            Column {
-                Text(deviceName)
-                Text(device.type, fontWeight = FontWeight.Thin, fontStyle = FontStyle.Italic)
-            }
-        }else {
-            Text(device.type, fontWeight = FontWeight.Thin, fontStyle = FontStyle.Italic)
-        }
-        Text("" + device.id)
-
-        // Device registered
-        if (device.registered) {
-            Text(device.registeredAt ?: "No date")
-            Button(
-                onClick = {listViewModel.get_device_info(device); navHostController.navigate(Page.DeviceDetail.route)}
+    Box (modifier = modifier.padding(10.dp)) {
+        Card(
+            modifier = Modifier
+                .border(2.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(3.dp)),
+            colors = CardDefaults.cardColors()
+                .copy(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
-                Text("Info")
-            }
+                Box(
+                    modifier = Modifier
+                        .padding(start = 2.dp, end = 10.dp),
+                    contentAlignment = Alignment.CenterStart,
+                ) {
+                    // Fix mutable variable
+                    val deviceName = device.name
+                    if (deviceName != null) {
+                        Column {
+                            Text(deviceName)
+                            Text(
+                                device.type,
+                                fontWeight = FontWeight.Thin,
+                                fontStyle = FontStyle.Italic
+                            )
+                        }
+                    } else {
+                        Text(
+                            device.type,
+                            fontWeight = FontWeight.Thin,
+                            fontStyle = FontStyle.Italic,
+                        )
+                    }
+                }
 
-            Button(
-                onClick = {listViewModel.delete_connected_device(device)}
-            ) {
-                Text("Delete")
+                Row (
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Device registered
+                    if (device.registered) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Button(
+                                onClick = {
+                                    listViewModel.get_device_info(device); navHostController.navigate(
+                                    Page.DeviceDetail.route
+                                )
+                                },
+                            ) {
+                                Text("Info")
+                            }
+                        }
+                        Spacer(Modifier.width(10.dp))
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Button(
+                                onClick = { listViewModel.delete_connected_device(device) },
+                            ) {
+                                Text("Delete")
+                            }
+                        }
+                    } else {
+                        Button(
+                            onClick = { listViewModel.register_screen(device) },
+                        ) { Text("Register") }
+                        Spacer(Modifier.width(10.dp))
+                        Button(
+                            onClick = { listViewModel.delete_detected_device(device) },
+                        ) { Text("Delete") }
+                    }
+                }
             }
-        } else {
-            Button(onClick = {listViewModel.register_screen(device)}) { Text("Register") }
-            Button(onClick = {listViewModel.delete_detected_device(device) }) { Text("Delete") }
         }
     }
 }
