@@ -14,7 +14,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 
-
+/**
+ * ViewModel on list screen
+ *
+ * ViewModel are parts of Android Jetpack-compose UI
+ * More info: https://developer.android.com/courses/android-basics-compose/unit-4
+ */
 class ListViewModel(
     private val deviceRepository: DeviceRepository,
     private val dateUtils: DateUtils
@@ -23,6 +28,7 @@ class ListViewModel(
     var uiState: ListUiState by mutableStateOf (ListUiState.LoadingState)
         private set
 
+    // Job handler for refresh
     private var refreshScanJob: Job? = null
 
     var registerDeviceName by mutableStateOf("")
@@ -38,21 +44,28 @@ class ListViewModel(
         }
     }
 
+    /**
+     * Lunch server device scan and get detected device at the end
+     */
     fun start_scan() {
         println("Scan start")
-        // Launch async job
+        // Launch coroutine job, handle job to kill if any
         this.refreshScanJob = CoroutineScope(Dispatchers.Main).launch  {
             // The device repository will lock until the server finish the scan.
             deviceRepository.scan_start()
             println("Scan Finished")
             // Update scanned device.
             update_scan()
+            // Stop loading animation
             update_action_ui_state(scanStarted = false)
         }
-        // Set device loading
+        // Set device loading for loading animation.
         update_action_ui_state(scanStarted = true)
     }
 
+    /**
+     * Kill scan job
+     */
     fun stop_scan() {
         refreshScanJob?.job?.cancel()
         update_action_ui_state(scanStarted = false)
@@ -68,10 +81,16 @@ class ListViewModel(
         }
     }
 
+    /**
+     * Set device to device detail screen
+     */
     fun get_device_info(device: Device) {
         deviceRepository.detailledDeviceId = device.id
     }
 
+    /**
+     * Spawn register screen
+     */
     fun register_screen(device: Device){
         val oldUiState = this.uiState
         if (oldUiState is ListUiState.ListState){
@@ -81,6 +100,9 @@ class ListViewModel(
         }
     }
 
+    /**
+     * Dismiss register popup
+     */
     fun dismiss_register(){
         val oldUiState = uiState
         if (oldUiState is ListUiState.RegisterDevice && oldUiState.listState != null){
@@ -91,14 +113,22 @@ class ListViewModel(
         registerDeviceName = ""
     }
 
+    /**
+     * Handle name register TextField change
+     */
     fun update_register_name(name: String){
+        // TODO: add some name check (length, used char...)
         this.registerDeviceName = name
     }
 
+    /**
+     * Handle register new device
+     */
     fun register_device(device: Device){
         viewModelScope.launch {
             deviceRepository.add_new_device(device, name = registerDeviceName)
             update_connected_device()
+            // Reset name for other change
             registerDeviceName = ""
         }
 

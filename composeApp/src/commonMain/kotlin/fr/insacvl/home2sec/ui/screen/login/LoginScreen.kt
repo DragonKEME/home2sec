@@ -29,19 +29,10 @@ fun LoginScreen(navHostController: NavHostController, repository: DeviceReposito
     val loginViewModel: LoginViewModel = viewModel { LoginViewModel (repository, navHostController) }
     Surface(modifier = modifier.fillMaxSize()) {
         when (val uistate = loginViewModel.uiState) {
-            is LoginUiState.FormState -> LoginFormScreen(loginViewModel, uistate, modifier)
+            is LoginUiState.FormState -> LoginForm(loginViewModel, uistate, modifier.fillMaxSize().padding(10.dp))
             is LoginUiState.LoadingState -> {}
         }
     }
-}
-
-@Composable
-fun LoginFormScreen(viewModel: LoginViewModel, uiState: LoginUiState.FormState, modifier: Modifier = Modifier){
-    LoginForm(
-        viewModel,
-        uiState,
-        modifier = modifier.fillMaxSize().padding(10.dp)
-    )
 }
 
 

@@ -19,6 +19,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel on details screen
+ *
+ * ViewModel are parts of Android Jetpack-compose UI
+ * More info: https://developer.android.com/courses/android-basics-compose/unit-4
+ */
 class DeviceDetailViewModel(
     private val deviceRepository: DeviceRepository,
     private val dateUtils: DateUtils
@@ -42,6 +48,9 @@ class DeviceDetailViewModel(
         kill_sensor_refresh_job()
     }
 
+    /**
+     * Load all device details.
+     */
     fun load_device_detail(){
         viewModelScope.launch {
             val deviceId = deviceRepository.detailledDeviceId ?: return@launch
@@ -74,6 +83,9 @@ class DeviceDetailViewModel(
         }
     }
 
+    /**
+     * Sensor refresh job update sensor data form device every second.
+     */
     fun lauch_sensor_refresh_job() {
         refreshSensorJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
@@ -93,12 +105,18 @@ class DeviceDetailViewModel(
         this.refreshSensorJob = null
     }
 
+    /**
+     * Launch device action
+     */
     fun do_action(device: Device, action: DeviceAction){
         viewModelScope.launch {
             deviceRepository.do_action(device, action)
         }
     }
 
+    /**
+     * Open device name edition popup
+     */
     fun change_name_screen(){
         val oldUiState = this.uiState
         if (oldUiState is DeviceDetailUiState.DeviceInfo && oldUiState.device != null){
@@ -107,10 +125,16 @@ class DeviceDetailViewModel(
         }
     }
 
+    /**
+     * Handle name edition TextField change
+     */
     fun update_name_string(name: String){
         editDeviceName = name
     }
 
+    /**
+     * Dismiss name edition popup handler
+     */
     fun dismiss_update(){
         val currentUiState = uiState
         if (currentUiState is DeviceDetailUiState.EditDeviceName){
@@ -119,6 +143,9 @@ class DeviceDetailViewModel(
         editDeviceName = ""
     }
 
+    /**
+     * Handle name change
+     */
     fun update_device(){
         val currentUiState = uiState
         if (currentUiState !is DeviceDetailUiState.EditDeviceName){

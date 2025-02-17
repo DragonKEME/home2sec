@@ -11,6 +11,12 @@ import fr.insacvl.home2sec.models.errors.InternalError
 import fr.insacvl.home2sec.ui.Page
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel on login Screen
+ *
+ * ViewModel are parts of Android Jetpack-compose UI
+ * More info: https://developer.android.com/courses/android-basics-compose/unit-4
+ */
 class LoginViewModel(
     private val deviceRepository: DeviceRepository,
     private val navHostController: NavHostController
