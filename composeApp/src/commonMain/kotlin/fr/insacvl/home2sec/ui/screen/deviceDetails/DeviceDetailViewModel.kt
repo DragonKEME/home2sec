@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.deviceDetails
+package fr.insacvl.home2sec.ui.screen.deviceDetails
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

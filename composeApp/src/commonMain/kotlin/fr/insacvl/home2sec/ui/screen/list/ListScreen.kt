@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.listScreen
+package fr.insacvl.home2sec.ui.screen.list
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

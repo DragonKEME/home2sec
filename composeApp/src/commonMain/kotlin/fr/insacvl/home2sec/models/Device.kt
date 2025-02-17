@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class Device(
+    // DTO
     val id: Int,
     var name: String? = null,
     var ip: String,
@@ -20,6 +21,6 @@ data class Device(
     var lastSeen: String? = null,
     @SerialName("is_alive")
     val isAlive: Boolean = true,
-
+    // Internal
     var registered: Boolean = false
 )

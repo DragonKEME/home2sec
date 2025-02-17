@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.listScreen
+package fr.insacvl.home2sec.ui.screen.list
 
 import fr.insacvl.home2sec.models.Device
 

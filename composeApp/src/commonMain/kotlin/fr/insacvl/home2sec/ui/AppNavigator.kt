@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.insacvl.home2sec.data.DeviceRepository
-import fr.insacvl.home2sec.ui.deviceDetails.DeviceDetailScreen
-import fr.insacvl.home2sec.ui.listScreen.HomeStateCheck
-import fr.insacvl.home2sec.ui.login.LoginScreen
+import fr.insacvl.home2sec.ui.screen.deviceDetails.DeviceDetailScreen
+import fr.insacvl.home2sec.ui.screen.list.HomeStateCheck
+import fr.insacvl.home2sec.ui.screen.login.LoginScreen
 import fr.insacvl.home2sec.utils.DateUtils
 
 sealed class Page(val route: String){

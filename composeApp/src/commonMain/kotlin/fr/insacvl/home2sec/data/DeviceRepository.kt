@@ -5,6 +5,13 @@ import fr.insacvl.home2sec.models.DeviceAction
 import fr.insacvl.home2sec.models.DeviceLog
 import fr.insacvl.home2sec.models.SensorData
 
+
+/**
+ * Repository pour la récupération des données du serveur
+ *
+ * Android like repository
+ *
+ */
 interface DeviceRepository {
     var detailledDeviceId: Int?
 

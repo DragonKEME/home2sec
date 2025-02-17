@@ -8,6 +8,11 @@ import fr.insacvl.home2sec.models.SensorData
 import fr.insacvl.home2sec.models.errors.InternalError
 import fr.insacvl.home2sec.models.errors.InternalErrorKind
 
+/**
+ * Sample data repository
+ *
+ * Repository contenant des données d'exemple pour tester l'application sans serveur.
+ */
 class SampleRepository: DeviceRepository {
     private var scanStarted: Boolean = false
     private var localDetectedDevice: MutableList<Device> = mutableListOf()

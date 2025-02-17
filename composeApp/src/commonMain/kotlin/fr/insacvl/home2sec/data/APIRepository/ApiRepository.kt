@@ -18,9 +18,16 @@ import io.ktor.client.request.put
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 
+/**
+ * Repository recupérant ses données depuis le serveur du projets.
+ *
+ * **NOTE**: Pour changer l'adresse du serveur il faut editer la contante BASE_URL
+ */
+
 class ApiRepository (
     val httpClient: HttpClient
 ): DeviceRepository{
+    // Adresse du serveur
     val BASE_URL = "http://10.3.141.1:8000"
 
     var token: String? = null

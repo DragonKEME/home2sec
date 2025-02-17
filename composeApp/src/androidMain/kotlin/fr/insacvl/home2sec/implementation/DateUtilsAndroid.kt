@@ -28,7 +28,7 @@ class DateUtilsAndroid: DateUtils {
                 isoDate.replace('T',' ')
             }
         }else {
-            //TODO: Never Try
+            // Old SDK (never tested)
             val formatter = SimpleDateFormat("yyyy-MM-ddTHH:mm:ss", Locale.getDefault())
             return formatter.parse(isoDate)?.toString() ?: isoDate.replace('T', ' ')
         }

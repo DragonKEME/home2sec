@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.deviceDetails
+package fr.insacvl.home2sec.ui.screen.deviceDetails
 
 import fr.insacvl.home2sec.models.Device
 import fr.insacvl.home2sec.models.DeviceAction

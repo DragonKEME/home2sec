@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeviceLog(
+    // DTO
     @SerialName("log_type")
     val logType: String,
     val message: String,

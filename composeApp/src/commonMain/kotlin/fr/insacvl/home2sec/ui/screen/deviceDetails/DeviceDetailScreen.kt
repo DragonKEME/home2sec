@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.deviceDetails
+package fr.insacvl.home2sec.ui.screen.deviceDetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,7 +41,7 @@ import fr.insacvl.home2sec.utils.DateUtils
 
 @Composable
 fun DeviceDetailScreen(navHostController: NavHostController,deviceRepository: DeviceRepository, dateUtils: DateUtils, modifier: Modifier = Modifier){
-    val deviceDetailViewModel: DeviceDetailViewModel = viewModel {DeviceDetailViewModel(deviceRepository, dateUtils)}
+    val deviceDetailViewModel: DeviceDetailViewModel = viewModel { DeviceDetailViewModel(deviceRepository, dateUtils) }
     Surface (modifier = modifier.fillMaxSize()) {
         when (val uiState = deviceDetailViewModel.uiState) {
             is DeviceDetailUiState.DeviceInfo -> DeviceDetails(

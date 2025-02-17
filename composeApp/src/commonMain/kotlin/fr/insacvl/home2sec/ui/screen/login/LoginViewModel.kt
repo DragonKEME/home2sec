@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.login
+package fr.insacvl.home2sec.ui.screen.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

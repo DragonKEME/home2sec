@@ -1,4 +1,4 @@
-package fr.insacvl.home2sec.ui.login
+package fr.insacvl.home2sec.ui.screen.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,7 @@ import fr.insacvl.home2sec.data.DeviceRepository
 
 @Composable
 fun LoginScreen(navHostController: NavHostController, repository: DeviceRepository, modifier: Modifier = Modifier){
-    val loginViewModel: LoginViewModel = viewModel { LoginViewModel (repository, navHostController)}
+    val loginViewModel: LoginViewModel = viewModel { LoginViewModel (repository, navHostController) }
     Surface(modifier = modifier.fillMaxSize()) {
         when (val uistate = loginViewModel.uiState) {
             is LoginUiState.FormState -> LoginFormScreen(loginViewModel, uistate, modifier)
