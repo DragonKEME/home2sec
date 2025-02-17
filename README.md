@@ -23,12 +23,11 @@ Clone project
 git clone https://github.com/DragonKEME/home2sec.git
 ```
 
-Download AndroidStudio.
-Open project in android studio and sync gradle project.
+Download AndroidStudio, open project and sync gradle project.
 
 ## Launch
 Android: Connect your device (whit ADB debugging enabled) or use AndroidStudio emulator.
-Launch `composeApp` in configuration.
+Launch `composeApp` configuration.
 
 JavaApp: Lunch `Home2SEC - JavaApp` configuration
 
