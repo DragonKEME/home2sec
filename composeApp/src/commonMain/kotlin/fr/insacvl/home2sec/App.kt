@@ -18,8 +18,11 @@ fun App(configuration: Configuration) {
     ){
 
         // Change here the data location
+        // Server repository
         val deviceRepository: DeviceRepository = ApiRepository(httpClient = configuration.httpClient)
+        // Local repository
         //val deviceRepository: DeviceRepository = SampleRepository()
+
         HomeNavigation(deviceRepository, configuration.dateUtils)
     }
 }
